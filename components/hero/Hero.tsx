@@ -33,212 +33,228 @@ export default function Hero() {
           "
         />
 
-        {/* Cinematic overlay */}
+        {/* Dark cinematic gradient */}
         <div
           className="
             absolute
             inset-0
             bg-gradient-to-b
-            from-[#12261F]/20
+            from-[#12261F]/25
             via-transparent
-            to-[#12261F]/75
+            to-[#12261F]/80
           "
         />
 
-        {/* Slight side vignette */}
+        {/* Subtle left/right depth */}
         <div
           className="
             absolute
             inset-0
             bg-gradient-to-r
-            from-[#12261F]/20
+            from-[#12261F]/25
             via-transparent
-            to-[#12261F]/10
+            to-transparent
           "
         />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-[100svh] flex-col">
+      <div className="relative z-10 min-h-[100svh]">
 
-        {/* Top editorial label */}
-        <div className="px-6 pt-8 sm:px-10 sm:pt-10">
+        {/* Editorial label */}
+        <div className="absolute left-6 top-8 sm:left-10 sm:top-10">
           <p
             className="
-              text-[9px]
+              text-[8px]
               font-medium
               uppercase
-              tracking-[0.42em]
-              text-white/85
+              tracking-[0.45em]
+              text-white/80
+              sm:text-[9px]
             "
           >
             A celebration of love
           </p>
         </div>
 
-        {/* Main identity */}
+        {/* Names */}
         <div
           className="
-            mt-auto
-            px-6
-            pb-10
-            sm:px-10
-            sm:pb-14
+            absolute
+            right-5
+            top-[22%]
+            w-[72%]
+            text-right
+            sm:right-10
+            sm:top-[20%]
+            sm:w-[58%]
+            md:w-[52%]
           "
         >
-          <div className="mx-auto max-w-5xl">
-
-            {/* Date */}
-            <p
+          <h1
+            className="
+              font-display
+              font-light
+              leading-[0.78]
+              tracking-[-0.04em]
+              text-white
+            "
+          >
+            <span
               className="
-                mb-5
-                text-[9px]
-                font-medium
-                uppercase
-                tracking-[0.42em]
-                text-[#D4AF37]
-                sm:text-[10px]
+                block
+                text-[17vw]
+                sm:text-[12vw]
+                md:text-[9vw]
+                lg:text-[7rem]
               "
             >
-              18 · 06 · 2027
-            </p>
+              Sarah
+            </span>
 
-            {/* Names */}
-            <h1
+            <span
               className="
-                font-display
-                font-light
-                leading-[0.82]
-                tracking-[-0.04em]
+                mt-1
+                block
+                text-[17vw]
+                sm:text-[12vw]
+                md:text-[9vw]
+                lg:text-[7rem]
               "
             >
-              <span
-                className="
-                  block
-                  text-[21vw]
-                  sm:text-[16vw]
-                  md:text-[13vw]
-                  lg:text-[9rem]
-                "
-              >
-                Sarah
-              </span>
+              <span className="text-[#D4AF37]">&amp;</span>
+            </span>
 
-              <span
-                className="
-                  block
-                  pl-[14vw]
-                  text-[21vw]
-                  sm:pl-[10vw]
-                  sm:text-[16vw]
-                  md:pl-[8vw]
-                  md:text-[13vw]
-                  lg:pl-28
-                  lg:text-[9rem]
-                "
-              >
-                <span className="text-[#D4AF37]">&amp;</span>{" "}
-                Alexander
-              </span>
-            </h1>
-
-            {/* Bottom metadata */}
-            <div
+            <span
               className="
-                mt-7
-                flex
-                items-end
-                justify-between
-                border-t
-                border-white/20
-                pt-5
+                mt-1
+                block
+                text-[14vw]
+                sm:text-[10vw]
+                md:text-[8vw]
+                lg:text-[6.5rem]
               "
             >
-              <div>
-                <p
-                  className="
-                    font-display
-                    text-[23px]
-                    font-light
-                    leading-tight
-                    sm:text-3xl
-                  "
-                >
-                  We&apos;re getting married.
-                </p>
+              Alexander
+            </span>
+          </h1>
+        </div>
 
-                <p
-                  className="
-                    mt-3
-                    text-[8px]
-                    font-medium
-                    uppercase
-                    tracking-[0.35em]
-                    text-white/65
-                  "
-                >
-                  Chennai · India
-                </p>
-              </div>
-
-              {/* Minimal scroll cue */}
-              <button
-                type="button"
-                onClick={scrollDown}
-                aria-label="Scroll to countdown"
+        {/* Bottom information */}
+        <div
+          className="
+            absolute
+            bottom-8
+            left-6
+            right-6
+            sm:bottom-10
+            sm:left-10
+            sm:right-10
+          "
+        >
+          <div
+            className="
+              flex
+              items-end
+              justify-between
+              gap-6
+              border-t
+              border-white/20
+              pt-5
+            "
+          >
+            <div>
+              <p
                 className="
-                  hidden
-                  flex-col
-                  items-center
-                  gap-2
-                  text-white/70
-                  sm:flex
+                  text-[9px]
+                  font-medium
+                  uppercase
+                  tracking-[0.4em]
+                  text-[#D4AF37]
                 "
               >
-                <span
-                  className="
-                    text-[8px]
-                    uppercase
-                    tracking-[0.3em]
-                  "
-                >
-                  Scroll
-                </span>
+                18 · 06 · 2027
+              </p>
 
-                <ArrowDown
-                  size={15}
-                  strokeWidth={1}
-                />
-              </button>
+              <p
+                className="
+                  mt-3
+                  font-display
+                  text-[22px]
+                  font-light
+                  leading-tight
+                  text-white
+                  sm:text-3xl
+                "
+              >
+                We&apos;re getting married.
+              </p>
+
+              <p
+                className="
+                  mt-2
+                  text-[8px]
+                  font-medium
+                  uppercase
+                  tracking-[0.35em]
+                  text-white/60
+                "
+              >
+                Chennai · India
+              </p>
             </div>
 
+            {/* Desktop scroll cue */}
+            <button
+              type="button"
+              onClick={scrollDown}
+              aria-label="Scroll to countdown"
+              className="
+                hidden
+                flex-col
+                items-center
+                gap-2
+                text-white/70
+                sm:flex
+              "
+            >
+              <span className="text-[8px] uppercase tracking-[0.3em]">
+                Scroll
+              </span>
+
+              <ArrowDown
+                size={15}
+                strokeWidth={1}
+              />
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile scroll cue */}
-      <button
-        type="button"
-        onClick={scrollDown}
-        aria-label="Scroll to countdown"
-        className="
-          absolute
-          bottom-5
-          right-6
-          flex
-          h-8
-          w-8
-          items-center
-          justify-center
-          text-white/65
-          sm:hidden
-        "
-      >
-        <ArrowDown
-          size={16}
-          strokeWidth={1}
-        />
-      </button>
+        {/* Mobile scroll cue */}
+        <button
+          type="button"
+          onClick={scrollDown}
+          aria-label="Scroll to countdown"
+          className="
+            absolute
+            bottom-7
+            right-5
+            flex
+            h-8
+            w-8
+            items-center
+            justify-center
+            text-white/70
+            sm:hidden
+          "
+        >
+          <ArrowDown
+            size={15}
+            strokeWidth={1}
+          />
+        </button>
+
+      </div>
     </section>
   );
 }
