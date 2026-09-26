@@ -6,13 +6,13 @@
 
 A modern, elegant and highly animated wedding invitation built with Next.js, designed to feel personal, intimate and more like a piece of premium stationery than a conventional website.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-brightgreen?style=for-the-badge&logo=vercel)](YOUR_VERCEL_URL)<br>
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-brightgreen?style=for-the-badge&logo=vercel)](https://everafter-gamma.vercel.app/)<br>
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-Styling-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
-🌐 **Live Website:** <a href="YOUR_VERCEL_URL" target="_blank" rel="noopener noreferrer">Open Ever After</a>
+🌐 **Live Website:** <a href="https://everafter-gamma.vercel.app/" target="_blank" rel="noopener noreferrer">Open Ever After</a>
 
 </div>
 
