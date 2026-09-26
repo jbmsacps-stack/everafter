@@ -1,245 +1,541 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const STORY_DURATION = 6000;
+type Story = {
+  number: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+};
 
-const stories = [
+const stories: Story[] = [
   {
     number: "01",
     title: "First Met",
-    subtitle: "Where it all began.",
     description:
-      "Some stories begin with a grand moment. Ours began simply, with two people meeting and a conversation neither of us knew would matter so much.",
+      "Somewhere between an ordinary day and an unexpected moment, our story quietly began.",
     image: "/images/story-01.png",
+    date: "The beginning",
   },
   {
     number: "02",
     title: "First Date",
-    subtitle: "A beginning of something more.",
     description:
-      "One conversation became another, one evening became many, and somewhere along the way, spending time together started to feel like the easiest thing in the world.",
+      "A simple day together became one of those memories we wished we could keep forever.",
     image: "/images/story-02.png",
+    date: "A little later",
   },
   {
     number: "03",
     title: "The Proposal",
-    subtitle: "The question that changed everything.",
     description:
-      "With a little planning, a lot of anticipation, and one very important question, the next chapter of our story began.",
+      "Under a sky full of lights, one question turned our favorite story into forever.",
     image: "/images/story-03.png",
+    date: "The moment",
   },
 ];
 
 export default function OurStory() {
-  const [activeStory, setActiveStory] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const imageElementRef = useRef<HTMLImageElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
 
-  const animationFrame = useRef<number | null>(null);
-  const startTime = useRef<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const transitioningRef = useRef(false);
 
-  const changeStory = (index: number) => {
-    setActiveStory(index);
-    setProgress(0);
-    startTime.current = null;
-  };
+  const activeStory = stories[activeIndex];
 
-  useEffect(() => {
-    startTime.current = performance.now();
-
-    const animate = (currentTime: number) => {
-      if (startTime.current === null) {
-        startTime.current = currentTime;
-      }
-
-      const elapsed = currentTime - startTime.current;
-      const percentage = Math.min(
-        (elapsed / STORY_DURATION) * 100,
-        100
+  /*
+   * Section entrance animation
+   */
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        headingRef.current,
+        {
+          opacity: 0,
+          y: 40,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 78%",
+            once: true,
+          },
+        }
       );
 
-      setProgress(percentage);
+      gsap.fromTo(
+        imageRef.current,
+        {
+          opacity: 0,
+          y: 50,
+          scale: 0.96,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          delay: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+            once: true,
+          },
+        }
+      );
+    }, sectionRef);
 
-      if (elapsed >= STORY_DURATION) {
-        setActiveStory((current) => (current + 1) % stories.length);
-        setProgress(0);
-        startTime.current = currentTime;
-      }
+    return () => ctx.revert();
+  }, []);
 
-      animationFrame.current =
-        requestAnimationFrame(animate);
-    };
+  /*
+   * Slow dreamy movement of the illustration.
+   *
+   * This is intentionally VERY subtle.
+   */
+  useEffect(() => {
+    if (!imageElementRef.current) return;
 
-    animationFrame.current =
-      requestAnimationFrame(animate);
+    const floatAnimation = gsap.to(imageElementRef.current, {
+      y: -7,
+      x: 2,
+      rotation: 0.35,
+      scale: 1.015,
+      duration: 4.5,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
 
     return () => {
-      if (animationFrame.current !== null) {
-        cancelAnimationFrame(animationFrame.current);
-      }
+      floatAnimation.kill();
     };
-  }, [activeStory]);
+  }, [activeIndex]);
 
-  const story = stories[activeStory];
+  /*
+   * Transition to another story.
+   */
+  const changeStory = useCallback(
+    (nextIndex: number) => {
+      if (
+        transitioningRef.current ||
+        nextIndex === activeIndex ||
+        nextIndex < 0 ||
+        nextIndex >= stories.length
+      ) {
+        return;
+      }
+
+      transitioningRef.current = true;
+
+      const timeline = gsap.timeline({
+        onComplete: () => {
+          setActiveIndex(nextIndex);
+          transitioningRef.current = false;
+        },
+      });
+
+      /*
+       * Current illustration gently disappears.
+       */
+      timeline
+        .to(imageRef.current, {
+          opacity: 0,
+          scale: 0.96,
+          filter: "blur(5px)",
+          y: -8,
+          duration: 0.45,
+          ease: "power2.inOut",
+        })
+        .to(
+          contentRef.current,
+          {
+            opacity: 0,
+            y: 12,
+            duration: 0.3,
+            ease: "power2.in",
+          },
+          "-=0.25"
+        );
+    },
+    [activeIndex]
+  );
+
+  /*
+   * Animate the newly selected story into place.
+   */
+  useEffect(() => {
+    if (transitioningRef.current) return;
+
+    const timeline = gsap.timeline();
+
+    timeline
+      .set(imageRef.current, {
+        opacity: 0,
+        scale: 1.04,
+        filter: "blur(5px)",
+        y: 12,
+      })
+      .set(contentRef.current, {
+        opacity: 0,
+        y: 12,
+      })
+      .to(imageRef.current, {
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        y: 0,
+        duration: 0.85,
+        ease: "power3.out",
+      })
+      .to(
+        contentRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          ease: "power3.out",
+        },
+        "-=0.5"
+      );
+
+    return () => {
+      timeline.kill();
+    };
+  }, [activeIndex]);
+
+  /*
+   * Automatic story progression.
+   */
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      const nextIndex =
+        activeIndex === stories.length - 1
+          ? 0
+          : activeIndex + 1;
+
+      changeStory(nextIndex);
+    }, 6500);
+
+    return () => window.clearInterval(timer);
+  }, [activeIndex, changeStory]);
+
+  /*
+   * Progress indicator animation.
+   */
+  useEffect(() => {
+    if (!progressRef.current) return;
+
+    gsap.fromTo(
+      progressRef.current,
+      {
+        scaleX: 0,
+      },
+      {
+        scaleX: 1,
+        duration: 6.5,
+        ease: "none",
+      }
+    );
+  }, [activeIndex]);
 
   return (
     <section
+      ref={sectionRef}
       id="story"
-      className="bg-[#FDFBF7] px-5 py-20 sm:px-8 sm:py-28"
+      className="
+  overflow-hidden
+  bg-[#EFEAE1]
+  px-6
+  pt-20
+  pb-28
+  sm:px-8
+  sm:pt-24
+  sm:pb-36
+"
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-5xl">
 
-        {/* Heading */}
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B99A45]">
+        {/* Section heading */}
+        <div
+          ref={headingRef}
+          className="mx-auto max-w-xl text-center"
+        >
+          <p
+            className="
+              text-[9px]
+              font-semibold
+              uppercase
+              tracking-[0.45em]
+              text-[#B99A45]
+            "
+          >
             Our Story
           </p>
 
           <h2
             className="
-              mt-4
-              max-w-md
+              mt-6
               font-display
-              text-5xl
+              text-[46px]
               font-light
-              leading-[0.9]
-              tracking-[-0.02em]
+              leading-[0.95]
+              tracking-[-0.025em]
               text-[#1C352D]
               sm:text-6xl
             "
           >
-            A few moments
+            Three moments.
             <br />
-            that brought us here.
+            One beautiful story.
           </h2>
+
+          <p
+            className="
+              mx-auto
+              mt-6
+              max-w-sm
+              text-sm
+              leading-7
+              text-[#1C352D]/60
+            "
+          >
+            A few memories that brought us
+            from a first hello to forever.
+          </p>
         </div>
 
-        {/* Image */}
-        <div className="mt-10 overflow-hidden rounded-2xl bg-[#EFEAE1]">
-          <div className="relative aspect-[4/5]">
+        {/* Story stage */}
+        <div className="mx-auto mt-16 max-w-md sm:mt-20">
 
+          {/* Memory image */}
+          <div
+            ref={imageRef}
+            className="
+    relative
+    aspect-[4/5]
+    overflow-hidden
+    rounded-[20px]
+    bg-[#FDFBF7]
+    shadow-[0_25px_70px_rgba(28,53,45,0.10)]
+    isolate
+    will-change-transform
+  "
+          >
             <img
-              key={story.image}
-              src={story.image}
-              alt={story.title}
+              ref={imageElementRef}
+              src={activeStory.image}
+              alt={activeStory.title}
               className="
-                absolute
-                inset-0
-                h-full
-                w-full
-                object-cover
-                transition-opacity
-                duration-700
-              "
+      block
+      h-full
+      w-full
+      object-cover
+      will-change-transform
+    "
             />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-[#12261F]/45 via-transparent to-transparent" />
-
-            <span className="absolute bottom-5 left-5 font-display text-6xl font-light text-white/90">
-              {story.number}
-            </span>
-
-          </div>
-        </div>
-
-        {/* Story text */}
-        <div className="mt-8">
-
-          <p className="text-[9px] font-semibold uppercase tracking-[0.32em] text-[#B99A45]">
-            {story.number}
-          </p>
-
-          <h3 className="mt-3 font-display text-4xl font-light text-[#1C352D]">
-            {story.title}
-          </h3>
-
-          <p className="mt-1 text-sm font-medium text-[#1C352D]/55">
-            {story.subtitle}
-          </p>
-
-          <p className="mt-5 max-w-xl text-sm leading-7 text-[#1C352D]/65">
-            {story.description}
-          </p>
-
-        </div>
-
-        {/* Timeline */}
-        <div className="mt-10">
-
-          {/* Overall timeline */}
-          <div className="relative h-px bg-[#1C352D]/10">
 
             <div
               className="
-                absolute
-                left-0
-                top-0
-                h-px
-                bg-[#D4AF37]
-              "
-              style={{
-                width: `${progress}%`,
-                transition:
-                  "width 100ms linear",
-              }}
+      pointer-events-none
+      absolute
+      inset-0
+      bg-gradient-to-t
+      from-[#1C352D]/10
+      via-transparent
+      to-[#FDFBF7]/5
+    "
             />
 
+            <div
+              className="
+      absolute
+      right-5
+      top-5
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-full
+      border
+      border-[#FDFBF7]/60
+      bg-[#1C352D]/15
+      text-[10px]
+      tracking-[0.2em]
+      text-[#FDFBF7]
+      backdrop-blur-sm
+    "
+            >
+              {activeStory.number}
+            </div>
           </div>
 
-          {/* Story buttons */}
-          <div className="mt-5 grid grid-cols-3 gap-3">
+          {/* Story information */}
+          <div
+            ref={contentRef}
+            className="mt-9"
+          >
+            <p
+              className="
+                text-[9px]
+                font-medium
+                uppercase
+                tracking-[0.4em]
+                text-[#B99A45]
+              "
+            >
+              {activeStory.date}
+            </p>
 
-            {stories.map((item, index) => {
-              const isActive = index === activeStory;
+            <h3
+              className="
+                mt-3
+                font-display
+                text-4xl
+                font-light
+                text-[#1C352D]
+              "
+            >
+              {activeStory.title}
+            </h3>
 
-              return (
+            <p
+              className="
+                mt-4
+                max-w-sm
+                text-sm
+                leading-7
+                text-[#1C352D]/60
+              "
+            >
+              {activeStory.description}
+            </p>
+          </div>
+
+          {/* Story navigation */}
+          <div className="mt-9">
+
+            {/* Auto-progress */}
+            <div
+              className="
+                h-px
+                w-full
+                overflow-hidden
+                bg-[#1C352D]/10
+              "
+            >
+              <div
+                ref={progressRef}
+                className="
+                  h-full
+                  origin-left
+                  bg-[#B99A45]
+                "
+              />
+            </div>
+
+            <div className="mt-5 flex items-center justify-between">
+
+              {/* Story indicators */}
+              <div className="flex items-center gap-3">
+                {stories.map((story, index) => (
+                  <button
+                    key={story.number}
+                    type="button"
+                    aria-label={`Show ${story.title}`}
+                    onClick={() => changeStory(index)}
+                    className="group flex items-center gap-2"
+                  >
+                    <span
+                      className={`
+                        h-1.5
+                        rounded-full
+                        transition-all
+                        duration-500
+                        ${index === activeIndex
+                          ? "w-8 bg-[#1C352D]"
+                          : "w-1.5 bg-[#1C352D]/25"
+                        }
+                      `}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              {/* Previous / next */}
+              <div className="flex items-center gap-2">
                 <button
-                  key={item.number}
                   type="button"
-                  onClick={() => changeStory(index)}
-                  className="text-left"
-                  aria-label={`View ${item.title}`}
+                  onClick={() =>
+                    changeStory(activeIndex - 1)
+                  }
+                  disabled={activeIndex === 0}
+                  aria-label="Previous story"
+                  className="
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+                    rounded-full
+                    border
+                    border-[#1C352D]/15
+                    text-[#1C352D]
+                    transition
+                    active:scale-90
+                    disabled:opacity-25
+                  "
                 >
-                  <span
-                    className={`
-                      text-[9px]
-                      font-semibold
-                      uppercase
-                      tracking-[0.25em]
-                      transition-colors
-                      ${
-                        isActive
-                          ? "text-[#1C352D]"
-                          : "text-[#1C352D]/30"
-                      }
-                    `}
-                  >
-                    {item.number}
-                  </span>
-
-                  <span
-                    className={`
-                      mt-2
-                      block
-                      text-xs
-                      transition-colors
-                      ${
-                        isActive
-                          ? "text-[#1C352D]"
-                          : "text-[#1C352D]/35"
-                      }
-                    `}
-                  >
-                    {item.title}
-                  </span>
+                  <ChevronLeft size={16} strokeWidth={1.2} />
                 </button>
-              );
-            })}
 
+                <button
+                  type="button"
+                  onClick={() =>
+                    changeStory(activeIndex + 1)
+                  }
+                  disabled={
+                    activeIndex === stories.length - 1
+                  }
+                  aria-label="Next story"
+                  className="
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+                    rounded-full
+                    border
+                    border-[#1C352D]/15
+                    text-[#1C352D]
+                    transition
+                    active:scale-90
+                    disabled:opacity-25
+                  "
+                >
+                  <ChevronRight size={16} strokeWidth={1.2} />
+                </button>
+              </div>
+
+            </div>
           </div>
 
         </div>
-
       </div>
     </section>
   );
