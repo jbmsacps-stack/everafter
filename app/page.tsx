@@ -3,6 +3,7 @@ import Hero from "@/components/hero/Hero";
 import VenueSection from "@/components/venue/VenueSection";
 import OurStory from "@/components/story/OurStory";
 import RSVP from "@/components/rsvp/RSVP";
+import FAQ from "@/components/faq/FAQ";
 
 export default function Home() {
   return (
@@ -16,6 +17,8 @@ export default function Home() {
       <OurStory />
 
       <RSVP />
+
+      <FAQ />
 
     </main>
   );
