@@ -1,23 +1,12 @@
 "use client";
 
-import { ArrowDown } from "lucide-react";
-
 export default function Hero() {
-  const scrollToStory = () => {
-    document.getElementById("story")?.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
-
   return (
     <section
       id="home"
-      className="min-h-[100svh] bg-[#FDFBF7] text-[#1C352D]"
+      className="bg-[#FDFBF7] text-[#1C352D]"
     >
-      {/* =====================================================
-          IMAGE
-      ====================================================== */}
-
+      {/* HERO IMAGE */}
       <div className="relative h-[46svh] min-h-[390px] overflow-hidden bg-[#1C352D]">
         <img
           src="/images/Hero.png"
@@ -28,7 +17,7 @@ export default function Hero() {
           }}
         />
 
-        {/* Very light photographic treatment */}
+        {/* Soft photographic overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
 
         {/* Editorial label */}
@@ -38,7 +27,7 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Couple initials */}
+        {/* Initials */}
         <div className="absolute bottom-6 right-6 flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-[#1C352D]/40 backdrop-blur-md">
           <span className="font-display text-sm text-[#D4AF37]">
             S <span className="text-white/60">&</span> A
@@ -46,28 +35,24 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* =====================================================
-          INVITATION CONTENT
-      ====================================================== */}
-
-      <div className="relative px-6 pb-8 pt-7 sm:px-8 sm:pb-10 sm:pt-9">
+      {/* INVITATION CONTENT */}
+      <div className="px-6 pb-10 pt-7 sm:px-8 sm:pb-12 sm:pt-9">
         <div className="mx-auto max-w-xl">
 
-          {/* Date */}
+          {/* DATE */}
           <p className="text-[9px] font-medium uppercase tracking-[0.4em] text-[#B99A45]">
             18 · 06 · 2027
           </p>
 
-          {/* Names */}
+          {/* NAMES */}
           <div className="mt-5 text-center">
-
             <h1 className="font-display font-light leading-[0.72] tracking-[-0.045em]">
 
               <span className="block text-[18vw] sm:text-[12vw]">
                 Sarah
               </span>
 
-              <span className="my-2 block font-display text-[12vw] leading-none text-[#D4AF37] sm:text-[8vw]">
+              <span className="my-2 block text-[11vw] leading-none text-[#D4AF37] sm:text-[7vw]">
                 &
               </span>
 
@@ -78,44 +63,27 @@ export default function Hero() {
             </h1>
           </div>
 
-          {/* Footer information */}
-          <div className="mt-7 flex items-end justify-between gap-5 border-t border-[#1C352D]/10 pt-5">
+          {/* INTRODUCTION */}
+          <div className="mt-9 border-t border-[#1C352D]/10 pt-6">
 
-            <div>
-              <p className="font-display text-[22px] leading-[0.95] sm:text-2xl">
-                We&apos;re getting
-                <br />
-                married.
-              </p>
+            <p className="font-display text-[27px] leading-[1.05] text-[#1C352D] sm:text-3xl">
+              We&apos;re getting married.
+            </p>
 
-              <p className="mt-3 text-[8px] font-medium uppercase tracking-[0.32em] text-[#1C352D]/50">
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-[9px] font-medium uppercase tracking-[0.32em] text-[#1C352D]/50">
                 Chennai · India
               </p>
+
+              <span className="h-px w-14 bg-[#D4AF37]/50" />
             </div>
 
-            <button
-              type="button"
-              onClick={scrollToStory}
-              aria-label="Scroll to our story"
-              className="
-                flex h-11 w-11 shrink-0
-                items-center justify-center
-                rounded-full
-                bg-[#1C352D]
-                text-[#FDFBF7]
-                shadow-[0_8px_25px_rgba(28,53,45,0.16)]
-                transition-transform duration-300
-                active:scale-90
-              "
-            >
-              <ArrowDown size={16} strokeWidth={1.2} />
-            </button>
-
           </div>
+
         </div>
       </div>
 
-      {/* Fine editorial line */}
+      {/* EDITORIAL DIVIDER */}
       <div className="mx-6 h-px bg-[#1C352D]/10 sm:mx-8" />
     </section>
   );
