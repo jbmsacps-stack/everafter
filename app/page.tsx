@@ -1,9 +1,12 @@
+import Countdown from "@/components/countdown/Countdown";
 import Hero from "@/components/hero/Hero";
 
 export default function Home() {
   return (
     <main className="bg-[#FDFBF7]">
       <Hero />
+
+      <Countdown />
 
       <section
         id="story"
