@@ -1,5 +1,6 @@
 import Countdown from "@/components/countdown/Countdown";
 import Hero from "@/components/hero/Hero";
+import VenueSection from "@/components/venue/VenueSection";
 
 export default function Home() {
   return (
@@ -7,6 +8,8 @@ export default function Home() {
       <Hero />
 
       <Countdown />
+
+      <VenueSection />
 
       <section
         id="story"
