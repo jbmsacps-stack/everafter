@@ -128,31 +128,31 @@ The goal is to make the website feel closer to a **physical wedding invitation b
 
 ### Hero
 
-<img src="screenshots/hero.png" alt="Ever After Hero Section" width="100%" />
+<img src="screenshots/hero.png" alt="Ever After Hero Section" width="30%" />
 
 <br><br>
 
 ### Countdown
 
-<img src="screenshots/countdown.png" alt="Ever After Countdown Section" width="100%" />
+<img src="screenshots/countdown.png" alt="Ever After Countdown Section" width="30%" />
 
 <br><br>
 
 ### Venue
 
-<img src="screenshots/venue.png" alt="Ever After Venue Section" width="100%" />
+<img src="screenshots/venue.png" alt="Ever After Venue Section" width="30%" />
 
 <br><br>
 
 ### Our Story
 
-<img src="screenshots/story.png" alt="Ever After Our Story Section" width="100%" />
+<img src="screenshots/story.png" alt="Ever After Our Story Section" width="30%" />
 
 <br><br>
 
 ### RSVP
 
-<img src="screenshots/rsvp.png" alt="Ever After RSVP Section" width="100%" />
+<img src="screenshots/rsvp.png" alt="Ever After RSVP Section" width="30%" />
 
 </div>
 
