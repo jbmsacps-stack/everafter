@@ -1,6 +1,7 @@
 import Countdown from "@/components/countdown/Countdown";
 import Hero from "@/components/hero/Hero";
 import VenueSection from "@/components/venue/VenueSection";
+import OurStory from "@/components/story/OurStory";
 
 export default function Home() {
   return (
@@ -11,14 +12,8 @@ export default function Home() {
 
       <VenueSection />
 
-      <section
-        id="story"
-        className="flex min-h-screen items-center justify-center"
-      >
-        <p className="font-display text-4xl text-[#1C352D]">
-          Our Story
-        </p>
-      </section>
+      <OurStory />
+
     </main>
   );
 }
