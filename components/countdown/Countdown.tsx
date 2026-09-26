@@ -2,33 +2,24 @@
 
 import { useEffect, useState } from "react";
 
-const weddingDate = new Date(
-  "2027-06-18T10:30:00+05:30"
-).getTime();
+const weddingDate = new Date("2027-06-18T10:30:00+05:30").getTime();
 
-type TimeLeft = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
+const initialTime = {
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
 };
 
-function calculateTimeLeft(): TimeLeft {
+function getTimeRemaining() {
   const difference = weddingDate - Date.now();
 
   if (difference <= 0) {
-    return {
-      days: 0,
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-    };
+    return initialTime;
   }
 
   return {
-    days: Math.floor(
-      difference / (1000 * 60 * 60 * 24)
-    ),
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
     hours: Math.floor(
       (difference / (1000 * 60 * 60)) % 24
     ),
@@ -41,52 +32,49 @@ function calculateTimeLeft(): TimeLeft {
   };
 }
 
-function pad(value: number) {
-  return value.toString().padStart(2, "0");
-}
-
 export default function Countdown() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(
-    calculateTimeLeft()
-  );
+  const [time, setTime] = useState(initialTime);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+    // Calculate only after the component has mounted.
+    setTime(getTimeRemaining());
+
+    const interval = window.setInterval(() => {
+      setTime(getTimeRemaining());
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => window.clearInterval(interval);
   }, []);
 
   const units = [
     {
       label: "Days",
-      value: timeLeft.days.toString(),
+      value: time.days,
     },
     {
       label: "Hours",
-      value: pad(timeLeft.hours),
+      value: time.hours,
     },
     {
       label: "Minutes",
-      value: pad(timeLeft.minutes),
+      value: time.minutes,
     },
     {
       label: "Seconds",
-      value: pad(timeLeft.seconds),
+      value: time.seconds,
     },
   ];
 
   return (
     <section
       id="countdown"
-      className="bg-[#FDFBF7] px-6 py-20 sm:px-8 sm:py-28"
+      className="bg-[#FDFBF7] px-6 py-24 sm:px-8 sm:py-32"
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-3xl">
 
-        {/* Section heading */}
+        {/* Heading */}
         <div className="text-center">
-          <p className="text-[9px] font-medium uppercase tracking-[0.45em] text-[#B99A45]">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.45em] text-[#B99A45]">
             Until we say I do
           </p>
 
@@ -94,10 +82,10 @@ export default function Countdown() {
             className="
               mt-6
               font-display
-              text-[42px]
+              text-4xl
               font-light
-              leading-[0.9]
-              tracking-[-0.025em]
+              leading-[0.95]
+              tracking-[-0.02em]
               text-[#1C352D]
               sm:text-6xl
             "
@@ -109,64 +97,62 @@ export default function Countdown() {
         </div>
 
         {/* Countdown */}
-        <div className="mt-14 border-y border-[#1C352D]/10">
-          <div className="grid grid-cols-4">
-
-            {units.map((unit, index) => (
-              <div
-                key={unit.label}
-                className={`
-                  flex
-                  min-w-0
-                  flex-col
-                  items-center
-                  justify-center
-                  py-8
-                  sm:py-10
-                  ${
-                    index !== 0
-                      ? "border-l border-[#1C352D]/10"
-                      : ""
-                  }
-                `}
+        <div
+          className="
+            mt-14
+            grid
+            grid-cols-4
+            border-y
+            border-[#1C352D]/10
+          "
+        >
+          {units.map((unit, index) => (
+            <div
+              key={unit.label}
+              className={`
+                flex
+                flex-col
+                items-center
+                px-2
+                py-7
+                sm:py-9
+                ${
+                  index !== units.length - 1
+                    ? "border-r border-[#1C352D]/10"
+                    : ""
+                }
+              `}
+            >
+              <span
+                className="
+                  font-display
+                  text-[31px]
+                  font-light
+                  leading-none
+                  tracking-tight
+                  text-[#1C352D]
+                  sm:text-5xl
+                "
               >
-                <span
-                  className="
-                    font-display
-                    text-[31px]
-                    font-light
-                    leading-none
-                    tabular-nums
-                    text-[#1C352D]
-                    sm:text-5xl
-                  "
-                >
-                  {unit.value}
-                </span>
+                {String(unit.value).padStart(2, "0")}
+              </span>
 
-                <span
-                  className="
-                    mt-3
-                    text-[7px]
-                    font-medium
-                    uppercase
-                    tracking-[0.28em]
-                    text-[#1C352D]/45
-                    sm:text-[9px]
-                  "
-                >
-                  {unit.label}
-                </span>
-              </div>
-            ))}
-
-          </div>
+              <span
+                className="
+                  mt-3
+                  text-[8px]
+                  font-medium
+                  uppercase
+                  tracking-[0.25em]
+                  text-[#1C352D]/45
+                  sm:text-[9px]
+                "
+              >
+                {unit.label}
+              </span>
+            </div>
+          ))}
         </div>
-
-        {/* Date */}
-        <p className="mt-8 text-center font-display text-lg text-[#1C352D]/65">
-          18 · June · 2027
-        </p>
 
       </div>
     </section>

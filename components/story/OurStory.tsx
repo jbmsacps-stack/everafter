@@ -9,7 +9,7 @@ const stories = [
     subtitle: "Where it all began.",
     description:
       "Some stories begin with a grand moment. Ours began simply, with two people meeting and a conversation neither of us knew would matter so much.",
-    image: "/images/story-01.jpg",
+    image: "/images/story-01.png",
   },
   {
     number: "02",
@@ -17,7 +17,7 @@ const stories = [
     subtitle: "A beginning of something more.",
     description:
       "One conversation became another, one evening became many, and somewhere along the way, spending time together started to feel like the easiest thing in the world.",
-    image: "/images/story-02.jpg",
+    image: "/images/story-02.png",
   },
   {
     number: "03",
@@ -25,7 +25,7 @@ const stories = [
     subtitle: "The question that changed everything.",
     description:
       "With a little planning, a lot of anticipation, and one very important question, the next chapter of our story began.",
-    image: "/images/story-03.jpg",
+    image: "/images/story-03.png",
   },
 ];
 
