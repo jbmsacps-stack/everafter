@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -46,304 +39,238 @@ const stories: Story[] = [
   },
 ];
 
-const STORY_DURATION = 6500;
-
 export default function OurStory() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-
   const imageRef = useRef<HTMLDivElement>(null);
   const imageElementRef = useRef<HTMLImageElement>(null);
-
   const contentRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const activeIndexRef = useRef(0);
   const transitioningRef = useRef(false);
-  const autoTimerRef = useRef<number | null>(null);
 
   const activeStory = stories[activeIndex];
 
   /*
-   * ------------------------------------------------------
-   * Section entrance
-   * ------------------------------------------------------
+   * Section entrance animation
    */
-
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const intro = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 78%",
-          once: true,
+      gsap.fromTo(
+        headingRef.current,
+        {
+          opacity: 0,
+          y: 40,
         },
-      });
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 78%",
+            once: true,
+          },
+        }
+      );
 
-      intro
-        .fromTo(
-          headingRef.current,
-          {
-            opacity: 0,
-            y: 35,
+      gsap.fromTo(
+        imageRef.current,
+        {
+          opacity: 0,
+          y: 50,
+          scale: 0.96,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          delay: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+            once: true,
           },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-          }
-        )
-        .fromTo(
-          imageRef.current,
-          {
-            opacity: 0,
-            y: 45,
-            scale: 0.965,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 1.2,
-            ease: "power3.out",
-          },
-          "-=0.55"
-        );
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   /*
-   * ------------------------------------------------------
-   * Slow dreamy artwork movement
-   * ------------------------------------------------------
+   * Slow dreamy movement of the illustration.
+   *
+   * This is intentionally VERY subtle.
    */
-
   useEffect(() => {
     if (!imageElementRef.current) return;
 
-    const animation = gsap.to(imageElementRef.current, {
-      y: -5,
-      x: 1.5,
-      rotation: 0.25,
-      scale: 1.012,
-      duration: 5,
+    const floatAnimation = gsap.to(imageElementRef.current, {
+      y: -7,
+      x: 2,
+      rotation: 0.35,
+      scale: 1.015,
+      duration: 4.5,
       ease: "sine.inOut",
       repeat: -1,
       yoyo: true,
     });
 
     return () => {
-      animation.kill();
+      floatAnimation.kill();
     };
   }, [activeIndex]);
 
   /*
-   * ------------------------------------------------------
-   * Progress bar
-   * ------------------------------------------------------
+   * Transition to another story.
    */
-
-  useEffect(() => {
-    if (!progressRef.current) return;
-
-    gsap.killTweensOf(progressRef.current);
-
-    gsap.set(progressRef.current, {
-      scaleX: 0,
-    });
-
-    gsap.to(progressRef.current, {
-      scaleX: 1,
-      duration: STORY_DURATION / 1000,
-      ease: "none",
-    });
-  }, [activeIndex]);
-
-  /*
-   * ------------------------------------------------------
-   * Story transition
-   * ------------------------------------------------------
-   */
-
   const changeStory = useCallback(
     (nextIndex: number) => {
-      if (transitioningRef.current) return;
-
-      const normalizedIndex =
-        nextIndex < 0
-          ? stories.length - 1
-          : nextIndex >= stories.length
-            ? 0
-            : nextIndex;
-
-      if (normalizedIndex === activeIndexRef.current) return;
+      if (
+        transitioningRef.current ||
+        nextIndex === activeIndex ||
+        nextIndex < 0 ||
+        nextIndex >= stories.length
+      ) {
+        return;
+      }
 
       transitioningRef.current = true;
 
-      if (autoTimerRef.current) {
-        window.clearTimeout(autoTimerRef.current);
-        autoTimerRef.current = null;
-      }
-
-      const outgoingImage = imageRef.current;
-      const outgoingContent = contentRef.current;
-
       const timeline = gsap.timeline({
         onComplete: () => {
-          activeIndexRef.current = normalizedIndex;
-          setActiveIndex(normalizedIndex);
+          setActiveIndex(nextIndex);
           transitioningRef.current = false;
         },
       });
 
+      /*
+       * Current illustration gently disappears.
+       */
       timeline
-        .to(
-          outgoingContent,
-          {
-            opacity: 0,
-            y: 10,
-            duration: 0.28,
-            ease: "power2.in",
-          },
-          0
-        )
-        .to(
-          outgoingImage,
-          {
-            opacity: 0,
-            scale: 0.975,
-            y: -5,
-            duration: 0.5,
-            ease: "power2.inOut",
-          },
-          0
-        );
-    },
-    []
-  );
-
-  /*
-   * ------------------------------------------------------
-   * Animate newly selected story
-   * ------------------------------------------------------
-   */
-
-  useEffect(() => {
-    if (!imageRef.current || !contentRef.current) return;
-
-    if (transitioningRef.current) {
-      const entrance = gsap.timeline({
-        delay: 0.05,
-        onComplete: () => {
-          transitioningRef.current = false;
-        },
-      });
-
-      entrance
-        .set(imageRef.current, {
-          opacity: 0,
-          scale: 1.025,
-          y: 8,
-        })
-        .set(contentRef.current, {
-          opacity: 0,
-          y: 10,
-        })
         .to(imageRef.current, {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.75,
-          ease: "power3.out",
+          opacity: 0,
+          scale: 0.96,
+          filter: "blur(5px)",
+          y: -8,
+          duration: 0.45,
+          ease: "power2.inOut",
         })
         .to(
           contentRef.current,
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power3.out",
+            opacity: 0,
+            y: 12,
+            duration: 0.3,
+            ease: "power2.in",
           },
-          "-=0.42"
+          "-=0.25"
         );
+    },
+    [activeIndex]
+  );
 
-      return () => {
-        entrance.kill();
-      };
-    }
+  /*
+   * Animate the newly selected story into place.
+   */
+  useEffect(() => {
+    if (transitioningRef.current) return;
 
-    /*
-     * Initial render
-     */
-    gsap.set(imageRef.current, {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-    });
+    const timeline = gsap.timeline();
 
-    gsap.set(contentRef.current, {
-      opacity: 1,
-      y: 0,
-    });
+    timeline
+      .set(imageRef.current, {
+        opacity: 0,
+        scale: 1.04,
+        filter: "blur(5px)",
+        y: 12,
+      })
+      .set(contentRef.current, {
+        opacity: 0,
+        y: 12,
+      })
+      .to(imageRef.current, {
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        y: 0,
+        duration: 0.85,
+        ease: "power3.out",
+      })
+      .to(
+        contentRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          ease: "power3.out",
+        },
+        "-=0.5"
+      );
+
+    return () => {
+      timeline.kill();
+    };
   }, [activeIndex]);
 
   /*
-   * ------------------------------------------------------
-   * Automatic progression
-   * ------------------------------------------------------
+   * Automatic story progression.
    */
-
   useEffect(() => {
-    const scheduleNext = () => {
-      autoTimerRef.current = window.setTimeout(() => {
-        const nextIndex =
-          activeIndexRef.current === stories.length - 1
-            ? 0
-            : activeIndexRef.current + 1;
+    const timer = window.setInterval(() => {
+      const nextIndex =
+        activeIndex === stories.length - 1
+          ? 0
+          : activeIndex + 1;
 
-        changeStory(nextIndex);
-      }, STORY_DURATION);
-    };
+      changeStory(nextIndex);
+    }, 6500);
 
-    scheduleNext();
-
-    return () => {
-      if (autoTimerRef.current) {
-        window.clearTimeout(autoTimerRef.current);
-      }
-    };
+    return () => window.clearInterval(timer);
   }, [activeIndex, changeStory]);
 
   /*
-   * ------------------------------------------------------
-   * Render
-   * ------------------------------------------------------
+   * Progress indicator animation.
    */
+  useEffect(() => {
+    if (!progressRef.current) return;
+
+    gsap.fromTo(
+      progressRef.current,
+      {
+        scaleX: 0,
+      },
+      {
+        scaleX: 1,
+        duration: 6.5,
+        ease: "none",
+      }
+    );
+  }, [activeIndex]);
 
   return (
     <section
       ref={sectionRef}
       id="story"
       className="
-        overflow-hidden
-        bg-[#EFEAE1]
-        px-6
-        pt-20
-        pb-28
-        sm:px-8
-        sm:pt-24
-        sm:pb-36
-      "
+  overflow-hidden
+  bg-[#EFEAE1]
+  px-6
+  pt-20
+  pb-28
+  sm:px-8
+  sm:pt-24
+  sm:pb-36
+"
     >
       <div className="mx-auto max-w-5xl">
 
-        {/* Heading */}
-
+        {/* Section heading */}
         <div
           ref={headingRef}
           className="mx-auto max-w-xl text-center"
@@ -393,81 +320,72 @@ export default function OurStory() {
         </div>
 
         {/* Story stage */}
-
         <div className="mx-auto mt-16 max-w-md sm:mt-20">
 
-          {/* Artwork */}
-
+          {/* Memory image */}
           <div
             ref={imageRef}
             className="
-              relative
-              aspect-[4/5]
-              overflow-hidden
-              rounded-[24px]
-              bg-[#FDFBF7]
-              shadow-[0_25px_70px_rgba(28,53,45,0.10)]
-              isolate
-              will-change-transform
-            "
+    relative
+    aspect-[4/5]
+    overflow-hidden
+    rounded-[20px]
+    bg-[#FDFBF7]
+    shadow-[0_25px_70px_rgba(28,53,45,0.10)]
+    isolate
+    will-change-transform
+  "
           >
             <img
               ref={imageElementRef}
               src={activeStory.image}
               alt={activeStory.title}
               className="
-                block
-                h-full
-                w-full
-                object-cover
-                will-change-transform
-                select-none
-              "
-              draggable={false}
+      block
+      h-full
+      w-full
+      object-cover
+      will-change-transform
+    "
             />
-
-            {/* Soft overlay */}
 
             <div
               className="
-                pointer-events-none
-                absolute
-                inset-0
-                bg-gradient-to-t
-                from-[#1C352D]/10
-                via-transparent
-                to-[#FDFBF7]/5
-              "
+      pointer-events-none
+      absolute
+      inset-0
+      bg-gradient-to-t
+      from-[#1C352D]/10
+      via-transparent
+      to-[#FDFBF7]/5
+    "
             />
-
-            {/* Story number */}
 
             <div
               className="
-                absolute
-                right-5
-                top-5
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                border
-                border-[#FDFBF7]/55
-                bg-[#1C352D]/15
-                text-[9px]
-                tracking-[0.2em]
-                text-[#FDFBF7]
-                backdrop-blur-sm
-              "
+      absolute
+      right-5
+      top-5
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-full
+      border
+      border-[#FDFBF7]/60
+      bg-[#1C352D]/15
+      text-[10px]
+      tracking-[0.2em]
+      text-[#FDFBF7]
+      backdrop-blur-sm
+    "
             >
               {activeStory.number}
             </div>
           </div>
 
           {/* Story information */}
-
           <div
             ref={contentRef}
             className="mt-9"
@@ -490,7 +408,6 @@ export default function OurStory() {
                 font-display
                 text-4xl
                 font-light
-                leading-none
                 text-[#1C352D]
               "
             >
@@ -510,12 +427,10 @@ export default function OurStory() {
             </p>
           </div>
 
-          {/* Navigation */}
-
+          {/* Story navigation */}
           <div className="mt-9">
 
-            {/* Progress */}
-
+            {/* Auto-progress */}
             <div
               className="
                 h-px
@@ -536,26 +451,15 @@ export default function OurStory() {
 
             <div className="mt-5 flex items-center justify-between">
 
-              {/* Indicators */}
-
+              {/* Story indicators */}
               <div className="flex items-center gap-3">
                 {stories.map((story, index) => (
                   <button
                     key={story.number}
                     type="button"
                     aria-label={`Show ${story.title}`}
-                    aria-current={
-                      index === activeIndex
-                        ? "step"
-                        : undefined
-                    }
                     onClick={() => changeStory(index)}
-                    className="
-                      flex
-                      items-center
-                      gap-2
-                      p-1
-                    "
+                    className="group flex items-center gap-2"
                   >
                     <span
                       className={`
@@ -563,10 +467,9 @@ export default function OurStory() {
                         rounded-full
                         transition-all
                         duration-500
-                        ${
-                          index === activeIndex
-                            ? "w-8 bg-[#1C352D]"
-                            : "w-1.5 bg-[#1C352D]/25"
+                        ${index === activeIndex
+                          ? "w-8 bg-[#1C352D]"
+                          : "w-1.5 bg-[#1C352D]/25"
                         }
                       `}
                     />
@@ -575,14 +478,13 @@ export default function OurStory() {
               </div>
 
               {/* Previous / next */}
-
               <div className="flex items-center gap-2">
-
                 <button
                   type="button"
                   onClick={() =>
                     changeStory(activeIndex - 1)
                   }
+                  disabled={activeIndex === 0}
                   aria-label="Previous story"
                   className="
                     flex
@@ -594,23 +496,21 @@ export default function OurStory() {
                     border
                     border-[#1C352D]/15
                     text-[#1C352D]
-                    transition-all
-                    duration-300
-                    hover:bg-[#1C352D]
-                    hover:text-[#FDFBF7]
+                    transition
                     active:scale-90
+                    disabled:opacity-25
                   "
                 >
-                  <ChevronLeft
-                    size={16}
-                    strokeWidth={1.2}
-                  />
+                  <ChevronLeft size={16} strokeWidth={1.2} />
                 </button>
 
                 <button
                   type="button"
                   onClick={() =>
                     changeStory(activeIndex + 1)
+                  }
+                  disabled={
+                    activeIndex === stories.length - 1
                   }
                   aria-label="Next story"
                   className="
@@ -623,19 +523,13 @@ export default function OurStory() {
                     border
                     border-[#1C352D]/15
                     text-[#1C352D]
-                    transition-all
-                    duration-300
-                    hover:bg-[#1C352D]
-                    hover:text-[#FDFBF7]
+                    transition
                     active:scale-90
+                    disabled:opacity-25
                   "
                 >
-                  <ChevronRight
-                    size={16}
-                    strokeWidth={1.2}
-                  />
+                  <ChevronRight size={16} strokeWidth={1.2} />
                 </button>
-
               </div>
 
             </div>
