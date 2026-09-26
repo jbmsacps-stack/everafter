@@ -1,3 +1,4 @@
+import ScrollAnimations from "@/components/animations/ScrollAnimations";
 import Countdown from "@/components/countdown/Countdown";
 import Hero from "@/components/hero/Hero";
 import VenueSection from "@/components/venue/VenueSection";
@@ -8,6 +9,9 @@ import WeddingFooter from "@/components/footer/WeddingFooter";
 
 export default function Home() {
   return (
+    <>
+    <ScrollAnimations/>
+
     <main className="bg-[#FDFBF7]">
       <Hero />
 
@@ -24,5 +28,6 @@ export default function Home() {
       <WeddingFooter />
 
     </main>
+    </>
   );
 }

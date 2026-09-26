@@ -110,7 +110,10 @@ export default function FAQ() {
         </div>
 
         {/* FAQ list */}
-        <div className="mt-14 border-t border-[#1C352D]/15">
+        <div
+          data-stagger
+          className="mt-14 border-t border-[#1C352D]/15"
+        >
 
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
@@ -164,10 +167,9 @@ export default function FAQ() {
                       text-[#1C352D]
                       transition-transform
                       duration-500
-                      ${
-                        isOpen
-                          ? "rotate-180"
-                          : "rotate-0"
+                      ${isOpen
+                        ? "rotate-180"
+                        : "rotate-0"
                       }
                     `}
                   >
@@ -184,10 +186,9 @@ export default function FAQ() {
                     transition-[grid-template-rows]
                     duration-500
                     ease-in-out
-                    ${
-                      isOpen
-                        ? "grid-rows-[1fr]"
-                        : "grid-rows-[0fr]"
+                    ${isOpen
+                      ? "grid-rows-[1fr]"
+                      : "grid-rows-[0fr]"
                     }
                   `}
                 >
