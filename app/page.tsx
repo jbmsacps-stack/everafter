@@ -4,6 +4,7 @@ import VenueSection from "@/components/venue/VenueSection";
 import OurStory from "@/components/story/OurStory";
 import RSVP from "@/components/rsvp/RSVP";
 import FAQ from "@/components/faq/FAQ";
+import WeddingFooter from "@/components/footer/WeddingFooter";
 
 export default function Home() {
   return (
@@ -19,6 +20,8 @@ export default function Home() {
       <RSVP />
 
       <FAQ />
+
+      <WeddingFooter />
 
     </main>
   );
