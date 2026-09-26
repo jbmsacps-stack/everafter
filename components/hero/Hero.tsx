@@ -166,7 +166,7 @@ export default function Hero() {
         <img
           ref={imageRef}
           src="/images/Hero.png"
-          alt="Sarah and Alexander"
+          alt="Sakthi and Siva"
           className="
             h-full
             w-full
@@ -246,7 +246,7 @@ export default function Hero() {
               lg:text-[7rem]
             "
           >
-            Sarah
+            Sara
           </span>
 
           <span
@@ -274,7 +274,7 @@ export default function Hero() {
               lg:text-[6.5rem]
             "
           >
-            Alexander
+            Siva
           </span>
         </h1>
       </div>
