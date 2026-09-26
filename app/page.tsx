@@ -2,6 +2,7 @@ import SmoothScroll from "@/components/smooth-scroll/SmoothScroll";
 import ScrollAnimations from "@/components/animations/ScrollAnimations";
 import Countdown from "@/components/countdown/Countdown";
 import Hero from "@/components/hero/Hero";
+import Schedule from "@/components/schedule/Schedule";
 import VenueSection from "@/components/venue/VenueSection";
 import OurStory from "@/components/story/OurStory";
 import RSVP from "@/components/rsvp/RSVP";
@@ -20,6 +21,8 @@ export default function Home() {
       <Countdown />
 
       <VenueSection />
+
+      <Schedule />
 
       <OurStory />
 
