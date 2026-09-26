@@ -126,37 +126,43 @@ The goal is to make the website feel closer to a **physical wedding invitation b
 
 <div align="center">
 
-### Hero
+<table>
+<tr>
+<td align="center">
+<strong>Hero</strong><br><br>
+<img src="screenshots/hero.png" alt="Ever After Hero Section" width="280" />
+</td>
 
-<img src="screenshots/hero.png" alt="Ever After Hero Section" width="30%" />
+<td align="center">
+<strong>Countdown</strong><br><br>
+<img src="screenshots/countdown.png" alt="Ever After Countdown Section" width="280" />
+</td>
+</tr>
 
-<br><br>
+<tr>
+<td align="center">
+<strong>Venue</strong><br><br>
+<img src="screenshots/venue.png" alt="Ever After Venue Section" width="280" />
+</td>
 
-### Countdown
+<td align="center">
+<strong>Our Story</strong><br><br>
+<img src="screenshots/story.png" alt="Ever After Our Story Section" width="280" />
+</td>
+</tr>
 
-<img src="screenshots/countdown.png" alt="Ever After Countdown Section" width="30%" />
+<tr>
+<td align="center">
+<strong>RSVP</strong><br><br>
+<img src="screenshots/rsvp.png" alt="Ever After RSVP Section" width="280" />
+</td>
 
-<br><br>
-
-### Venue
-
-<img src="screenshots/venue.png" alt="Ever After Venue Section" width="30%" />
-
-<br><br>
-
-### Our Story
-
-<img src="screenshots/story.png" alt="Ever After Our Story Section" width="30%" />
-
-<br><br>
-
-### RSVP
-
-<img src="screenshots/rsvp.png" alt="Ever After RSVP Section" width="30%" />
+<td align="center">
+</td>
+</tr>
+</table>
 
 </div>
-
----
 
 ## 🛠️ Tech Stack
 
