@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const weddingDate = new Date("2027-06-18T10:30:00+05:30").getTime();
 
@@ -19,7 +23,9 @@ function getTimeRemaining() {
   }
 
   return {
-    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    days: Math.floor(
+      difference / (1000 * 60 * 60 * 24)
+    ),
     hours: Math.floor(
       (difference / (1000 * 60 * 60)) % 24
     ),
@@ -35,8 +41,15 @@ function getTimeRemaining() {
 export default function Countdown() {
   const [time, setTime] = useState(initialTime);
 
+  // Animation refs
+  const sectionRef = useRef<HTMLElement>(null);
+  const eyebrowRef = useRef<HTMLParagraphElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const dividerRef = useRef<HTMLDivElement>(null);
+  const countersRef = useRef<HTMLDivElement>(null);
+
+  // Countdown timer
   useEffect(() => {
-    // Calculate only after the component has mounted.
     setTime(getTimeRemaining());
 
     const interval = window.setInterval(() => {
@@ -44,6 +57,85 @@ export default function Countdown() {
     }, 1000);
 
     return () => window.clearInterval(interval);
+  }, []);
+
+  // Scroll animation
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+          once: true,
+        },
+      });
+
+      timeline
+        // Small gold eyebrow
+        .fromTo(
+          eyebrowRef.current,
+          {
+            opacity: 0,
+            y: 18,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+          }
+        )
+
+        // Main heading
+        .fromTo(
+          titleRef.current,
+          {
+            opacity: 0,
+            y: 30,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+          },
+          "-=0.45"
+        )
+
+        // Divider
+        .fromTo(
+          dividerRef.current,
+          {
+            scaleX: 0,
+            transformOrigin: "left center",
+          },
+          {
+            scaleX: 1,
+            duration: 0.9,
+            ease: "power2.out",
+          },
+          "-=0.45"
+        )
+
+        // Countdown numbers
+        .fromTo(
+          countersRef.current?.children || [],
+          {
+            opacity: 0,
+            y: 22,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power3.out",
+          },
+          "-=0.45"
+        );
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   const units = [
@@ -67,18 +159,37 @@ export default function Countdown() {
 
   return (
     <section
+      ref={sectionRef}
       id="countdown"
-      className="bg-[#FDFBF7] px-6 py-24 sm:px-8 sm:py-32"
+      className="
+        bg-[#FDFBF7]
+        px-6
+        py-24
+        sm:px-8
+        sm:py-32
+      "
     >
       <div className="mx-auto max-w-3xl">
 
         {/* Heading */}
         <div className="text-center">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.45em] text-[#B99A45]">
+
+          <p
+            ref={eyebrowRef}
+            className="
+              text-[9px]
+              font-semibold
+              uppercase
+              tracking-[0.45em]
+              text-[#B99A45]
+              opacity-0
+            "
+          >
             Until we say I do
           </p>
 
           <h2
+            ref={titleRef}
             className="
               mt-6
               font-display
@@ -87,6 +198,7 @@ export default function Countdown() {
               leading-[0.95]
               tracking-[-0.02em]
               text-[#1C352D]
+              opacity-0
               sm:text-6xl
             "
           >
@@ -94,64 +206,71 @@ export default function Countdown() {
             <br />
             begins.
           </h2>
+
         </div>
 
         {/* Countdown */}
         <div
+          ref={dividerRef}
           className="
             mt-14
-            grid
-            grid-cols-4
+            origin-left
             border-y
             border-[#1C352D]/10
           "
         >
-          {units.map((unit, index) => (
-            <div
-              key={unit.label}
-              className={`
-                flex
-                flex-col
-                items-center
-                px-2
-                py-7
-                sm:py-9
-                ${
-                  index !== units.length - 1
-                    ? "border-r border-[#1C352D]/10"
-                    : ""
-                }
-              `}
-            >
-              <span
-                className="
-                  font-display
-                  text-[31px]
-                  font-light
-                  leading-none
-                  tracking-tight
-                  text-[#1C352D]
-                  sm:text-5xl
-                "
+          <div
+            ref={countersRef}
+            className="grid grid-cols-4"
+          >
+            {units.map((unit, index) => (
+              <div
+                key={unit.label}
+                className={`
+                  flex
+                  flex-col
+                  items-center
+                  px-2
+                  py-7
+                  opacity-0
+                  sm:py-9
+                  ${
+                    index !== units.length - 1
+                      ? "border-r border-[#1C352D]/10"
+                      : ""
+                  }
+                `}
               >
-                {String(unit.value).padStart(2, "0")}
-              </span>
+                <span
+                  className="
+                    font-display
+                    text-[31px]
+                    font-light
+                    leading-none
+                    tracking-tight
+                    text-[#1C352D]
+                    sm:text-5xl
+                  "
+                >
+                  {String(unit.value).padStart(2, "0")}
+                </span>
 
-              <span
-                className="
-                  mt-3
-                  text-[8px]
-                  font-medium
-                  uppercase
-                  tracking-[0.25em]
-                  text-[#1C352D]/45
-                  sm:text-[9px]
-                "
-              >
-                {unit.label}
-              </span>
-            </div>
-          ))}
+                <span
+                  className="
+                    mt-3
+                    text-[8px]
+                    font-medium
+                    uppercase
+                    tracking-[0.25em]
+                    text-[#1C352D]/45
+                    sm:text-[9px]
+                  "
+                >
+                  {unit.label}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
