@@ -1,88 +1,244 @@
 "use client";
 
+import { ArrowDown } from "lucide-react";
+
 export default function Hero() {
-    return (
-        <section
-            id="home"
-            className="bg-[#FDFBF7] text-[#1C352D]"
+  const scrollDown = () => {
+    document.getElementById("countdown")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <section
+      id="home"
+      className="
+        relative
+        min-h-[100svh]
+        overflow-hidden
+        bg-[#12261F]
+        text-[#FDFBF7]
+      "
+    >
+      {/* Hero image */}
+      <div className="absolute inset-0">
+        <img
+          src="/images/Hero.png"
+          alt="Sarah and Alexander"
+          className="
+            h-full
+            w-full
+            object-cover
+            object-center
+          "
+        />
+
+        {/* Cinematic overlay */}
+        <div
+          className="
+            absolute
+            inset-0
+            bg-gradient-to-b
+            from-[#12261F]/20
+            via-transparent
+            to-[#12261F]/75
+          "
+        />
+
+        {/* Slight side vignette */}
+        <div
+          className="
+            absolute
+            inset-0
+            bg-gradient-to-r
+            from-[#12261F]/20
+            via-transparent
+            to-[#12261F]/10
+          "
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 flex min-h-[100svh] flex-col">
+
+        {/* Top editorial label */}
+        <div className="px-6 pt-8 sm:px-10 sm:pt-10">
+          <p
+            className="
+              text-[9px]
+              font-medium
+              uppercase
+              tracking-[0.42em]
+              text-white/85
+            "
+          >
+            A celebration of love
+          </p>
+        </div>
+
+        {/* Main identity */}
+        <div
+          className="
+            mt-auto
+            px-6
+            pb-10
+            sm:px-10
+            sm:pb-14
+          "
         >
-            {/* HERO IMAGE */}
-            <div className="relative h-[46svh] min-h-[390px] overflow-hidden bg-[#1C352D]">
-                <img
-                    src="/images/Hero.png"
-                    alt="Wedding couple"
-                    className="absolute inset-0 h-full w-full object-cover"
-                    style={{
-                        objectPosition: "center 58%",
-                    }}
+          <div className="mx-auto max-w-5xl">
+
+            {/* Date */}
+            <p
+              className="
+                mb-5
+                text-[9px]
+                font-medium
+                uppercase
+                tracking-[0.42em]
+                text-[#D4AF37]
+                sm:text-[10px]
+              "
+            >
+              18 · 06 · 2027
+            </p>
+
+            {/* Names */}
+            <h1
+              className="
+                font-display
+                font-light
+                leading-[0.82]
+                tracking-[-0.04em]
+              "
+            >
+              <span
+                className="
+                  block
+                  text-[21vw]
+                  sm:text-[16vw]
+                  md:text-[13vw]
+                  lg:text-[9rem]
+                "
+              >
+                Sarah
+              </span>
+
+              <span
+                className="
+                  block
+                  pl-[14vw]
+                  text-[21vw]
+                  sm:pl-[10vw]
+                  sm:text-[16vw]
+                  md:pl-[8vw]
+                  md:text-[13vw]
+                  lg:pl-28
+                  lg:text-[9rem]
+                "
+              >
+                <span className="text-[#D4AF37]">&amp;</span>{" "}
+                Alexander
+              </span>
+            </h1>
+
+            {/* Bottom metadata */}
+            <div
+              className="
+                mt-7
+                flex
+                items-end
+                justify-between
+                border-t
+                border-white/20
+                pt-5
+              "
+            >
+              <div>
+                <p
+                  className="
+                    font-display
+                    text-[23px]
+                    font-light
+                    leading-tight
+                    sm:text-3xl
+                  "
+                >
+                  We&apos;re getting married.
+                </p>
+
+                <p
+                  className="
+                    mt-3
+                    text-[8px]
+                    font-medium
+                    uppercase
+                    tracking-[0.35em]
+                    text-white/65
+                  "
+                >
+                  Chennai · India
+                </p>
+              </div>
+
+              {/* Minimal scroll cue */}
+              <button
+                type="button"
+                onClick={scrollDown}
+                aria-label="Scroll to countdown"
+                className="
+                  hidden
+                  flex-col
+                  items-center
+                  gap-2
+                  text-white/70
+                  sm:flex
+                "
+              >
+                <span
+                  className="
+                    text-[8px]
+                    uppercase
+                    tracking-[0.3em]
+                  "
+                >
+                  Scroll
+                </span>
+
+                <ArrowDown
+                  size={15}
+                  strokeWidth={1}
                 />
-
-                {/* Soft photographic overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
-
-                {/* Editorial label */}
-                <div className="absolute left-6 top-6 sm:left-8 sm:top-8">
-                    <p className="text-[8px] font-medium uppercase tracking-[0.38em] text-white/80">
-                        Celebration of Love
-                    </p>
-                </div>
-
-                {/* Initials */}
-                <div className="absolute bottom-6 right-6 flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-[#1C352D]/40 backdrop-blur-md">
-                    <span className="font-display text-sm text-[#D4AF37]">
-                        S <span className="text-white/60">&</span> A
-                    </span>
-                </div>
+              </button>
             </div>
 
-            {/* INVITATION CONTENT */}
-            <div className="px-6 pb-10 pt-7 sm:px-8 sm:pb-12 sm:pt-9">
-                <div className="mx-auto max-w-xl">
+          </div>
+        </div>
+      </div>
 
-                    {/* DATE */}
-                    <p className="text-[9px] font-medium uppercase tracking-[0.4em] text-[#B99A45]">
-                        18 · 06 · 2027
-                    </p>
-
-                    {/* NAMES */}
-                    <div className="mt-5 text-center">
-                        <h1 className="font-display font-light leading-[0.72] tracking-[-0.045em]">
-
-                            <span className="block text-[18vw] sm:text-[12vw]">
-                                Sarah
-                            </span>
-
-                            <span className="my-2 block text-[11vw] leading-none text-[#D4AF37] sm:text-[7vw]">
-                                &
-                            </span>
-
-                            <span className="block text-[18vw] sm:text-[12vw]">
-                                Alexander
-                            </span>
-
-                        </h1>
-                    </div>
-
-                    {/* INTRODUCTION */}
-                    <div className="mt-9 border-t border-[#1C352D]/10 pt-6">
-
-                        <p className="font-display text-[27px] leading-[1.05] text-[#1C352D] sm:text-3xl">
-                            We&apos;re getting married.
-                        </p>
-
-                        <div className="mt-4">
-                            <p className="text-[9px] font-medium uppercase tracking-[0.32em] text-[#1C352D]/50">
-                                Chennai · India
-                            </p>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            {/* EDITORIAL DIVIDER */}
-            <div className="mx-6 h-px bg-[#1C352D]/10 sm:mx-8" />
-        </section>
-    );
+      {/* Mobile scroll cue */}
+      <button
+        type="button"
+        onClick={scrollDown}
+        aria-label="Scroll to countdown"
+        className="
+          absolute
+          bottom-5
+          right-6
+          flex
+          h-8
+          w-8
+          items-center
+          justify-center
+          text-white/65
+          sm:hidden
+        "
+      >
+        <ArrowDown
+          size={16}
+          strokeWidth={1}
+        />
+      </button>
+    </section>
+  );
 }
