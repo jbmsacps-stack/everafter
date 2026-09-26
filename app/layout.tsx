@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+
 import "./globals.css";
+import SmoothScroll from "@/components/animations/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "EverAfter — A Celebration of Love",
@@ -14,7 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }
