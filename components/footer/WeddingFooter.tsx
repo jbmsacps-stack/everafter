@@ -131,11 +131,11 @@ export default function WeddingFooter() {
               text-[#FDFBF7]
             "
           >
-            Sakthi
+            Siva
             <span className="mx-3 text-[#D4AF37]">
               &
             </span>
-            Siva
+            Sakthi
           </p>
 
           <p

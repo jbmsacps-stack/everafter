@@ -246,7 +246,7 @@ export default function Hero() {
               lg:text-[7rem]
             "
           >
-            Sara
+            Siva
           </span>
 
           <span
@@ -274,7 +274,7 @@ export default function Hero() {
               lg:text-[6.5rem]
             "
           >
-            Siva
+            Sakthi
           </span>
         </h1>
       </div>
