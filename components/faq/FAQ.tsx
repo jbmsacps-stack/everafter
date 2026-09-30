@@ -30,11 +30,6 @@ const faqs = [
       "If your invitation includes a plus one, please add their name while submitting your RSVP. This helps us prepare the seating and arrangements.",
   },
   {
-    question: "Are children welcome?",
-    answer:
-      "Yes. Children are welcome to celebrate with us. Please include them in your RSVP so we can plan accordingly.",
-  },
-  {
     question: "Is there anything else I should know?",
     answer:
       "If you have a question that isn't answered here, please reach out to the family directly. We will be happy to help.",
